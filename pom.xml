@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.eclipse.xtend</groupId>
-    <artifactId>java2xtend.webapp</artifactId>
+    <artifactId>java2xtend-webapp</artifactId>
     <version>2.0-SNAPSHOT</version>
 
     <name>Java to Xtend Converter Online</name>
@@ -15,13 +16,13 @@
             <url>http://www.eclipse.org/legal/epl-v10.html</url>
         </license>
     </licenses>
-    
+
     <properties>
 
         <console.main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</console.main.class>
         <runnable.classifier>standalone</runnable.classifier>
 
-        <lib.minified/>                <!-- nothing (dev) or '.min' (prod) -->
+        <lib.minified />                <!-- nothing (dev) or '.min' (prod) -->
     
         <!-- Compiler and encoding -->
         <jdk.version>1.8</jdk.version>
@@ -39,7 +40,7 @@
         <maven.compiler.fork>true</maven.compiler.fork>
         
         <!-- Maven and plugins -->
-        <maven.minimal.version>3.2</maven.minimal.version>
+        <maven.minimal.version>3.3.1</maven.minimal.version>
         <!-- Polyglot for Maven requires 3.3.1+ -->
 
         <xtendVersion>2.9.0.beta3</xtendVersion>
@@ -61,6 +62,8 @@
         <maven.jar.plugin.version>2.6</maven.jar.plugin.version>
         <maven.resources.plugin.version>2.7</maven.resources.plugin.version>
         <replacer.plugin.version>1.5.3</replacer.plugin.version>
+        <maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
+        <spring.boot.maven.plugin.version>1.2.5.RELEASE</spring.boot.maven.plugin.version>
 
         <!-- Dependencies -->
 
@@ -283,6 +286,44 @@
 
     <profiles>
         <profile>
+            <id>standalone</id>
+            <activation>
+                <property>
+                    <name>standalone</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>${spring.boot.maven.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>package-runable-jar</id>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <classifier>${runnable.classifier}</classifier>
+                            <mainClass>${main.class}</mainClass>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven.antrun.plugin.version}</version>
+                        <configuration>
+                            <target>
+                                <java fork="true" jar="target/${project.build.finalName}-${runnable.classifier}.jar" />
+                            </target>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>        
+        <profile>
             <id>retrieve-assets</id>
             <activation>
                 <property>
@@ -491,7 +532,7 @@
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
-                                                <ignore/>
+                                                <ignore />
                                             </action>
                                         </pluginExecution>
                                         <pluginExecution>
@@ -506,7 +547,7 @@
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
-                                                <ignore/>
+                                                <ignore />
                                             </action>
                                         </pluginExecution>
                                         <pluginExecution>
@@ -533,28 +574,28 @@
                 </pluginManagement>
             </build>
         </profile>
-    <profile>
-<!-- When built in OpenShift the openshift profile will be used when invoking mvn. -->
-<!-- Use this profile for any OpenShift specific customization your app will need. -->
-<!-- By default that is to put the resulting archive into the deployments folder. -->
-<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-	<id>openshift</id>
-	<build>
-		<finalName>j2x-on-openshift</finalName>
-		<plugins>
-			<!--
- <plugin>
-       <artifactId>maven-war-plugin</artifactId>
-       <version>2.4</version>
-       <configuration>
-         <outputDirectory>YOUR WAR DESTINATION</outputDirectory>
-         <warName>ROOT</warName>
-       </configuration>
-     </plugin>
- -->
-		</plugins>
-	</build>
-</profile>
+        <profile>
+        <!-- When built in OpenShift the openshift profile will be used when invoking mvn. -->
+        <!-- Use this profile for any OpenShift specific customization your app will need. -->
+        <!-- By default that is to put the resulting archive into the deployments folder. -->
+        <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+            <id>openshift</id>
+            <build>
+                <finalName>j2x-on-openshift</finalName>
+                <plugins>
+			    <!--
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <outputDirectory>YOUR WAR DESTINATION</outputDirectory>
+                        <warName>ROOT</warName>
+                        </configuration>
+                    </plugin>
+                -->
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>
