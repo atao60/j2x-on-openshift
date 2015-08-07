@@ -1,0 +1,358 @@
+spark.freemarker ---> j2x-webapp
+
+1er essai : spark.freemarker
+
+Un projet HTTP avec une seule vue contenant :
+- une fenêtre de saisie
+- une fenêtre de restitution
+- un bouton pour copier de la 1ère vers la 2de
+
+A partir d'un pom minimaliste, construire une application avec :
+- spark
+- freemarker
+- bootstrap
+
+Reprendre à partir de :
+- java_spark_tutorial_from_scratch
+  -- 
+- org.popsuite.test.spark2
+  -- gestion auto des bibliothèques css et js
+  -- soit angular.js mais aussi bootstrap & C°
+- BlogService_ModifiedProject
+  -- css & js :  tout via cdn
+  
+Créer le projet spark.freemarker
+  à partir de l'assistant sans template
+  
+Récupérer dans le pom de spark.freemarker 
+celui de java_spark_tutorial_from_scratch
+
+Virer tout ce qui concerne les bibliothèques css et js  
+
+Créer les profiles :
+- eclipse-only
+- enforce
+
+Pour freemarker, les templates doivent être dans
+    src/main/resources/spark/template/freemarker
+Créer un layout.ftl qui référence les bibliothèques css et js uniquement depuis un cdtn
+en l'occurence ici jquery et bootstrap    
+
+OK
+
+ajouter les biblitohèques pour IE telles que indiquées sur 
+
+OK
+
+Insérer le modèle 
+- Java2XtendBatchRunner : non
+- Java2XtendBatchConverter : non
+- BackupAndConvert : la partie bacup et FS est totalement inutil
+
+=> séparer la partie qui gère la conversion des strings
+et sans lecture d'un fichier de configuration des options ...
+
+OK
+
+Créer un profil retrieve-assets pour toutes les bibliothèques client-side du projet spark.freemarker
+
+OK
+
+Revenir à spark.freemarker
+insérer l'appel du convertisseur
+
+OK
+
+Garder les cdn mais paramétriser les versions
+et créer un profile spécifique pour les gérer
+
+OK
+
+
+j2x-webapp
+--------
+
+Le projet https://github.com/rzymek/java2xtend.webapp
+gérait une instance de https://github.com/rzymek/java2xtend
+accessible depuis http://www.j2x.cloudbees.net/
+mais cette dernière page est dans les chou : une page par défaut d'un serveur tomcat s'affiche 
+
+
+Renommer le projet de spark.freemarker en j2x-webapp
+
+OK
+
+Ajouter un mot d'explication en haut de la page
+  et des liens en pied de page
+
+OK
+
+Créer un compte Openshift
+------------------
+
+Utiliser :
+    Java Hosting with OpenShift Online
+    https://www.openshift.com/web-hosting/java
+- ouvrir un compte
+
+OK
+
+Créer un compte Openshift
+Le valider
+
+Créer une 1ère application sur Openshift
+-------
+
+Depuis la page "Welcome to OpenShift"
+cliquer sur le lien "Create your first application now"
+cliquer sur le lien "Do-It-Yourself 0.1" tout en bas de la page
+saisir 
+- public url : http://j2x-atao60.rhcloud.com
+- source code : rien car l'idée est de voir ce qui Openshift va générer
+ 
+Enregistrer une clé publique, ici le contenu de ~/.ssh/id_rsa.pub
+
+Depuis une console :
+cd ~/git
+git clone ssh://55bfb5090c1e667b59000071@j2x-atao60.rhcloud.com/~/git/j2x.git/
+
+Confirmer l'autenticité de l'hôte 'j2x-atao60.rhcloud.com (54.175.111.157)'
+
+Il existe bien maintenant un dossier ~/git/j2x
+L'importer sous Eclipse
+
+    Import... > Git > Projects from Git > Existing local repository
+    
+Rechercher le dossier ~/git/j2x, le sélectionner
+et le dénommer sous Eclipse par "j2x-on-openshift"
+
+
+Renommer  j2x-on-openshift/diy/index.html
+en j2x-on-openshift/diy/welcome.html
+
+Créer un nouveau j2x-on-openshift/diy/index.html
+avec comme contenu un "Work in progress"
+
+Commiter et uploader
+
+OK
+
+Docs sur jetty embarqué sous Openshift
+---------
+
+Pour une appli avec jetty embarqé
+- Jetty on OpenShift – Lightweight Java Web Serving for the Cloud
+  https://blog.openshift.com/jetty-on-openshift-lightweight-java-web-serving-for-the-cloud/
+
+Plutôt que de passer par l'article ci-desus sur Jetty,
+essayer avec :
+- How to run a Java server application packaged as a jar
+  https://forums.openshift.com/how-to-run-a-java-server-application-packaged-as-a-jar
+- Developing Single Page Web Applications using Java 8, Spark, MongoDB, and AngularJS
+  https://blog.openshift.com/developing-single-page-web-applications-using-java-8-spark-mongodb-and-angularjs/  
+
+Le framework Spark s'appuie sur Jetty
+http://sparkjava.com/
+
+1er essai
+-------
+
+Suivre l'article "Developing Single Page ..." ci-dessus :
+- sans mongodb
+- et en remplaçant le code "todo" par le code de java2xtend.webapp
+  cf. https://github.com/rzymek/java2xtend.webapp
+
+Partir du pom.groovy de xtend-bootstrap-vertx-websocket-chat
+
+A noter que :
+- xtend-bootstrap-vertx-websocket-chat n'utilise pas angularjs  
+- et comme c'est vert-x, il doit gérer explicitement l'extraction et le placement
+  des fichiers js, css, ...     
+
+Bien que Spark utilise Jetty qui est conforme à Servlet 3, continuer
+avec la même démarche pour màj les bibliothèques js et css
+
+Créer un projet "org.popsuite.test.spark"
+rester au plus près de l'article
+
+OK sauf pour ce qui est de l'accès à Mongo qui n'est pas installé en local
+
+2e essai
+------
+
+Créer un  projet "org.popsuite.test.spark"
+Dupliquer  projet "org.popsuite.test.spark"
+et remplacer le modèle d'un todo par celui d'un j2x
+en partant de https://github.com/rzymek/java2xtend.webapp
+
+3e essai
+------
+
+Nouvel essai avec java_spark_tutorial, cf. [8]
+    Java Spark Framework Tutorial
+    http://taywils.me/2013/11/05/javasparkframeworktutorial.html
+    
+Récupérer https://github.com/taywils/java_spark_tutorial
+en local sous le nom de projet "java_spark_tutorial"
+    
+Créer un projet java_spark_tutorial_from_scratch
+    
+- step 1 : OK    
+- step 2 : OK    
+- step 3 : OK    
+- step 4 : OK
+
+passer en Java 8
+passer à Xtend
+
+- step 5 : Ok
+
+OK 
+arrêt au début de la partie traitant de la persistence
+ 
+4e essai
+-------
+
+Dupliquer java_spark_tutorial_from_scratch
+en j2x_javastark
+et y injecter le contenu de j2x-webapp
+
+OK
+
+Transférer j2x-webapp sous Openshift
+---------
+
+Dixit
+    Developing Single Page Web Applications using Java 8, Spark, MongoDB, and AngularJS
+    https://blog.openshift.com/developing-single-page-web-applications-using-java-8-spark-mongodb-and-angularjs/
+au § "Step 12: Deploying on OpenShift" : 
+
+This blog would not be complete if I didn’t show you how to run this application on OpenShift. 
+Today OpenShift does not support JDK 8 but that doesn’t mean you can’t run Java 8 applications. 
+You can use the DIY cartridge and install your own JDK version. The next command creates the todo
+ application you created in the above mentioned steps. It installs JDK 8 on the DIY gear and 
+ configures other settings.
+
+$ cd todoapp/..
+$ rhc app create todoapp diy mongodb-2.4 \  // installe todoapp, diy & mongodb
+    --repo=todoapp-os \  // ??? indique où installé sur openshift ???
+    --from-code=https://github.com/shekhargulati/spark-openshift-quickstart.git  //
+
+After this commands successfully finishes, you will see the todo app running 
+at http://todoapp-{domain-name}.rhcloud.com. 
+Please replace {domain-name} with your OpenShift account domain name.
+
+Pour ce qui est de la cassette DIY
+
+OpenShift Origin Cartridge Guide
+https://docs.openshift.org/origin-m4/oo_cartridge_guide.html
+
+Sur mon compte Openshift, on peut lister les applications déjà installées :
+    https://openshift.redhat.com/app/console/application/55bfb5090c1e667b59000071-j2x
+
+soit pour le moment une seule :
+    j2x-atao60.rhcloud.com
+avec la cassette Do-It-Yourself 0.1 
+
+Pour ajouter éventuellement d'autres cassettes, allez sur la page "Choose a cartridge to add to your application" :
+    https://openshift.redhat.com/app/console/application/55bfb5090c1e667b59000071-j2x/cartridge_types
+
+En bas de la page, il y a un champ de sélection aproprié : Install your own cartridge
+
+Il suffit de fournir l'URL d'un dépôt contenant une cassette, par ex. :
+- Spring Framework
+  https://hub.openshift.com/quickstarts/68-spring-framework
+  Spring Framework on OpenShift with JBoss EAP 6
+  https://github.com/openshift/spring-eap6-quickstart
+- shekhargulati/spark-openshift-quickstart
+  https://github.com/shekhargulati/spark-openshift-quickstart
+  identique à 
+  shekhargulati/todoapp-spark
+  https://github.com/shekhargulati/todoapp-spark
+  mais avec une configuration pour openshift, voir le sous dossier .openshift
+  
+Openshift et Java 8
+-------
+
+Openshift ne propose pas Java 8 par défaut
+Par contre le quickstart shekhargulati/spark-openshift-quickstart
+l'installe explicitement 
+
+Ce qui pose la question du téléchargment de JDK 8. 
+Par ex. depuis :
+    http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jdk-8u51-linux-x64.tar.gz : OK même sans acceptation license ?
+    ou encore avec https://edelivery.oracle.com/otn-pub/java/jdk/
+Il y a aussi :
+    www.java.net/download/jdk8u51/archive/b16/binaries/jdk-8u51-ea-bin-b16-linux-x64-??_???_????.tar.gz
+mais :
+- pourquoi en ea ?
+- il faut trouver la date !
+- et il n'est pas sûr qu'une approbation de la license soit là aussi demandée...
+
+Mmmm dixit https://gist.github.com/P7h/9741922 :
+wget --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u45-b14/jdk-8u45-linux-x64.tar.gz
+
+ce qui répond à la question ci-dessus au sujet de la licence Oracle
+
+Pour récupérer les réfs de la cernière version :
+~$ URL=$(curl -s http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html | \
+     awk "/downloads\['/ && ! /demos/ && /\['files'\]/ && /linux-x64/ && /\.tar\.gz/" | \
+     grep -o 'http.*\.tar\.gz')
+~$ echo $URL
+---> http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jdk-8u51-linux-x64.tar.gz
+
+La question restant alors de changement de cette page à chaque révision
+il faut en effet passer par http://www.oracle.com/technetwork/java/javase/downloads/index.html
+puis cliquer sur "JDK Downkoad" pour avoir cette page.
+
+Pour ce qui de la récupération de la dernière version dispo :
+~$ BASE_URL_8=http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jdk-8u51
+~$ JDK_VERSION=${BASE_URL_8: -8}
+~$ PLATFORM="-linux-x64.tar.gz"
+~$ wget -c -O "$JDK_VERSION$PLATFORM" \
+    --no-check-certificate --no-cookies 
+    --header "Cookie: oraclelicense=accept-securebackup-cookie" "${BASE_URL_8}${PLATFORM}"
+    
+Les explications et un script complet ici :
+    http://askubuntu.com/a/652901
+
+Quickstart minimlaliste pour spark
+-------
+Outre 
+    shekhargulati/spark-openshift-quickstart
+    https://github.com/shekhargulati/spark-openshift-quickstart
+    identique à 
+    shekhargulati/todoapp-spark
+    https://github.com/shekhargulati/todoapp-spark
+    mais avec une configuration pour openshift, voir le sous dossier .openshift
+voir aussi :
+
+    spark-on-openshift 
+    https://bitbucket.org/hogerapiyopiyo/spark-on-openshif
+
+Eclipse et Quickstart
+--------
+Jboss Tools propose un outil pour Openshift
+
+Ref. : Day 28: OpenShift Eclipse Integration for Java Developers
+       https://blog.openshift.com/day-28-openshift-eclipse-integration-for-java-developers/
+       
+Update site: http://download.jboss.org/jbosstools/updates/stable/luna/
+
+Créer un appli Openshaft avec l'assistant
+
+   File > New > Project... > OpenShift > OpenShift Application 
+
+Renseigner Username et Password
+
+
+
+
+TODO
+Ajouter une page 404  
+Afficher qq options tq validation, formatage, ...
+
+
+TODO :
+- i18n pour java_spark_j2x
+    
