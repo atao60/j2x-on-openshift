@@ -2,4 +2,18 @@
 # The logic to start up your application should be put in this
 # script. The application will work only if it binds to
 # $OPENSHIFT_DIY_IP:8080
-nohup $OPENSHIFT_REPO_DIR/diy/testrubyserver.rb $OPENSHIFT_DIY_IP $OPENSHIFT_REPO_DIR/diy |& /usr/bin/logshifter -tag diy &
+#nohup $OPENSHIFT_REPO_DIR/diy/testrubyserver.rb $OPENSHIFT_DIY_IP $OPENSHIFT_REPO_DIR/diy |& /usr/bin/logshifter -tag diy &
+
+#!/bin/bash
+
+set -x
+
+export M2=$OPENSHIFT_DATA_DIR/apache-maven-3.3.3/bin
+export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_51
+export PATH=$JAVA_HOME/bin:$M2:$PATH
+
+export IP_ADDRESS=$OPENSHIFT_DIY_IP
+export PORT=$OPENSHIFT_DIY_PORT
+
+cd $OPENSHIFT_REPO_DIR
+java -jar target/java2xtend-webapp-2.0-SNAPSHOT-standalone.jar &

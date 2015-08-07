@@ -1,0 +1,28 @@
+#!/bin/bash
+# This deploy hook gets executed after dependencies are resolved and the
+# build hook has been run but before the application has been started back
+# up again.  This script gets executed directly, so it could be python, php,
+# ruby, etc.
+set -x
+if [ ! -d $OPENSHIFT_DATA_DIR/jdk1.8.0_51 ]
+    then 
+        cd $OPENSHIFT_DATA_DIR
+        wget -c --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jdk-8u51-linux-x64.tar.gz
+        tar xvf *.tar.gz 
+        rm -f *.tar.gz
+fi
+
+if [ ! -d $OPENSHIFT_DATA_DIR/apache-maven-3.3.3 ]
+    then 
+        cd $OPENSHIFT_DATA_DIR
+        wget -c http://apache.websitebeheerjd.nl/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
+        tar xvf *.tar.gz 
+        rm -f *.tar.gz
+fi
+
+export M2=$OPENSHIFT_DATA_DIR/apache-maven-3.3.3/bin
+export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_51
+export PATH=$JAVA_HOME/bin:$M2:$PATH
+
+cd $OPENSHIFT_REPO_DIR
+mvn -s $OPENSHIFT_REPO_DIR/.openshift/settings.xml -q clean install
