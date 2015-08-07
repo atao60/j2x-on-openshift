@@ -27,11 +27,8 @@ class Bootstrap {
         val injector = new XtendStandaloneSetup().createInjectorAndDoEMFRegistration
         extension val j2xConverter = injector.getInstance(Convert).configure(new DefaultConvertConfig)
         
-        // cf. https://github.com/shekhargulati/todoapp-spark/blob/master/src/main/java/com/todoapp/Bootstrap.java
-        // pour un ex. de récupération d'adresse ip et de port avec openshift
-        
-        // ipAddress(IP_ADDRESS)
-        port(8082)
+        port(Integer.parseInt(System.getenv("PORT")?: "8080"))
+        ipAddress(System.getenv("IP_ADDRESS")?: "localhost")
         
         val freeMarkerEngine = new FreeMarkerEngine
 
