@@ -68,6 +68,8 @@
         <!-- Dependencies -->
 
         <!-- Server side -->
+        <java2xtend.version>2.0-SNAPSHOT</java2xtend.version>
+        
         <xtend.version>${xtendVersion}</xtend.version>
         <spark.core.version>2.2</spark.core.version>
         <!-- 2.0.0 -->
@@ -112,7 +114,7 @@
         <dependency>
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>java2xtend</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>${java2xtend.version}</version>
         </dependency>
     
         <!-- spark -->
@@ -329,10 +331,46 @@
             </build>
         </profile>
         <profile>
-            <id>retrieve-assets</id>
+        <!-- Package org.eclipse.xtend:java2xtend is not available from any public repository yet.
+             The project "xtend:java2xtend" must be a sibling project of this one, i.e. in the same parent folder. -->
+            <id>server-assets</id>
             <activation>
                 <property>
-                    <name>assets</name>
+                    <name>server-assets</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>fill-static-in-project-repo</id>
+                                <phase>initialize</phase><!-- no default phase -->
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <localRepositoryPath>${project.basedir}/repo</localRepositoryPath>
+                                    <createChecksum>true</createChecksum>
+                                    <packaging>jar</packaging>
+                                    <file>${project.basedir}/../java2xtend-2/target/java2xtend-2.0-SNAPSHOT.jar</file>
+                                    <groupId>org.eclipse.xtend</groupId>
+                                    <artifactId>java2xtend</artifactId>
+                                    <version>${java2xtend.version}</version>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- Keep the version of css and js libraries up-to-date inside the HTML pages -->
+            <id>client-assets</id>
+            <activation>
+                <property>
+                    <name>client-assets</name>
                 </property>
             </activation>
             <build>
@@ -580,20 +618,10 @@
             </build>
         </profile>
     </profiles>
-
     <repositories>
         <repository>
             <id>repo</id>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <checksumPolicy>ignore</checksumPolicy>
-            </snapshots>
             <url>file://${project.basedir}/repo</url>
         </repository>
     </repositories>
-    
 </project>
