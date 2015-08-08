@@ -118,6 +118,20 @@
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>java2xtend</artifactId>
             <version>${java2xtend.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     
         <!-- spark -->
@@ -125,6 +139,12 @@
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>${spark.core.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>            
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
@@ -334,6 +354,7 @@
                             </target>
                         </configuration>
                     </plugin>
+<!--                 
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -351,14 +372,14 @@
                             <mainClass>${main.class}</mainClass>
                         </configuration>
                     </plugin>
-<!--                 
+ -->
                     <plugin>
                         <artifactId>maven-shade-plugin</artifactId>
                         <version>${maven.shade.plugin.version}</version>
                         <configuration>
                             <filters>
                                 <filter>
-                                    < ! - - Exclude all signature related files from every artifact, regardless of its group or artifact id - - >
+                                    <!-- Exclude all signature related files from every artifact, regardless of its group or artifact id -->
                                     <artifact>*:*</artifact>
                                     <excludes>
                                         <exclude>META-INF/*.SF</exclude>
@@ -375,6 +396,8 @@
                                     <goal>shade</goal>
                                 </goals>
                                 <configuration>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>${runnable.classifier}</shadedClassifierName>
                                     <transformers>
                                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>${main.class}</mainClass>
@@ -384,7 +407,6 @@
                             </execution>
                         </executions>
                     </plugin>
- -->
                 </plugins>
             </build>
         </profile>
