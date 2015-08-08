@@ -11,6 +11,9 @@ import static spark.SparkBase.*
 import org.eclipse.xtend.java2xtend.converter.DefaultConvertConfig
 
 class Bootstrap {
+    
+    static val PORT_TAG = "PORT"
+    static val IP_ADDRESS_TAG = "IP_ADDRESS"
 
     static val JAVA_CODE_TAG = "java-code"
     static val XTEND_CODE_TAG = "xtend-code"
@@ -26,9 +29,9 @@ class Bootstrap {
         
         val injector = new XtendStandaloneSetup().createInjectorAndDoEMFRegistration
         extension val j2xConverter = injector.getInstance(Convert).configure(new DefaultConvertConfig)
-        
-        port(Integer.parseInt(System.getenv("PORT")?: "8080"))
-        ipAddress(System.getenv("IP_ADDRESS")?: "localhost")
+
+        port(Integer.parseInt(System.getenv(PORT_TAG)?: System.getProperty(PORT_TAG)?: "8080"))
+        ipAddress(System.getenv(IP_ADDRESS_TAG)?: System.getProperty(IP_ADDRESS_TAG)?: "localhost")
         
         val freeMarkerEngine = new FreeMarkerEngine
 
