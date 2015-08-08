@@ -18,8 +18,10 @@
     </licenses>
 
     <properties>
+    
+        <web.port>8082</web.port>
 
-        <console.main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</console.main.class>
+        <main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</main.class>
         <runnable.classifier>standalone</runnable.classifier>
 
         <lib.minified />                <!-- nothing (dev) or '.min' (prod) -->
@@ -64,12 +66,13 @@
         <replacer.plugin.version>1.5.3</replacer.plugin.version>
         <maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
         <spring.boot.maven.plugin.version>1.2.5.RELEASE</spring.boot.maven.plugin.version>
+        <maven.shade.plugin.version>2.4.1</maven.shade.plugin.version>
 
         <!-- Dependencies -->
 
         <!-- Server side -->
         <java2xtend.version>2.0-SNAPSHOT</java2xtend.version>
-        
+
         <xtend.version>${xtendVersion}</xtend.version>
         <spark.core.version>2.2</spark.core.version>
         <!-- 2.0.0 -->
@@ -317,8 +320,20 @@
                 </property>
             </activation>
             <build>
+                <!-- To get always the same name for the runnable jar -->
                 <finalName>j2x-on-openshift</finalName>
                 <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven.antrun.plugin.version}</version>
+                        <configuration>
+                            <target>
+                                <java fork="true" jar="target/${project.build.finalName}-${runnable.classifier}.jar">
+                                    <jvmarg value="-DPORT=${web.port}"/>
+                                </java>
+                            </target>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -336,15 +351,40 @@
                             <mainClass>${main.class}</mainClass>
                         </configuration>
                     </plugin>
+<!--                 
                     <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${maven.antrun.plugin.version}</version>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>${maven.shade.plugin.version}</version>
                         <configuration>
-                            <target>
-                                <java fork="true" jar="target/${project.build.finalName}-${runnable.classifier}.jar" />
-                            </target>
+                            <filters>
+                                <filter>
+                                    < ! - - Exclude all signature related files from every artifact, regardless of its group or artifact id - - >
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>${main.class}</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
+ -->
                 </plugins>
             </build>
         </profile>
