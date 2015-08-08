@@ -287,15 +287,33 @@
     </build>
 
     <profiles>
+        <profile>
         <!-- When built in OpenShift the openshift profile will be used when invoking mvn. -->
         <!-- Use this profile for any OpenShift specific customization your app will need. -->
         <!-- By default that is to put the resulting archive into the deployments folder. -->
         <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-        <profile>
             <id>openshift</id>
+            <build>
+                <finalName>j2x-on-openshift</finalName>
+                <plugins>
+                <!--
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <outputDirectory>YOUR WAR DESTINATION</outputDirectory>
+                        <warName>ROOT</warName>
+                        </configuration>
+                    </plugin>
+                -->
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>standalone</id>
             <activation>
                 <property>
-                    <name>openshift</name>
+                    <name>standalone</name>
                 </property>
             </activation>
             <build>
@@ -354,6 +372,7 @@
                                     <localRepositoryPath>${project.basedir}/repo</localRepositoryPath>
                                     <createChecksum>true</createChecksum>
                                     <packaging>jar</packaging>
+                                    <generatePom>true</generatePom>
                                     <file>${project.basedir}/../java2xtend-2/target/java2xtend-2.0-SNAPSHOT.jar</file>
                                     <groupId>org.eclipse.xtend</groupId>
                                     <artifactId>java2xtend</artifactId>

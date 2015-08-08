@@ -4,8 +4,6 @@
 # $OPENSHIFT_DIY_IP:8080
 #nohup $OPENSHIFT_REPO_DIR/diy/testrubyserver.rb $OPENSHIFT_DIY_IP $OPENSHIFT_REPO_DIR/diy |& /usr/bin/logshifter -tag diy &
 
-#!/bin/bash
-
 set -x
 
 export M2=$OPENSHIFT_DATA_DIR/apache-maven-3.3.3/bin
