@@ -18,7 +18,7 @@
     </licenses>
 
     <properties>
-    
+
         <web.port>8082</web.port>
 
         <main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</main.class>
@@ -67,6 +67,7 @@
         <maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
         <spring.boot.maven.plugin.version>1.2.5.RELEASE</spring.boot.maven.plugin.version>
         <maven.shade.plugin.version>2.4.1</maven.shade.plugin.version>
+        <maven.dependency.plugin.version>2.10</maven.dependency.plugin.version>
 
         <!-- Dependencies -->
 
@@ -144,7 +145,7 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-simple</artifactId>
                 </exclusion>
-            </exclusions>            
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
@@ -305,6 +306,18 @@
                     <artifactId>maven-site-plugin</artifactId>
                     <version>${maven.site.plugin.version}</version>
                 </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven.dependency.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven.antrun.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${maven.shade.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -316,19 +329,40 @@
         <!-- By default that is to put the resulting archive into the deployments folder. -->
         <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
             <id>openshift</id>
+            <activation>
+                <property>
+                    <name>openshift</name>
+                </property>
+            </activation>
             <build>
                 <finalName>j2x-on-openshift</finalName>
                 <plugins>
-                <!--
                     <plugin>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>2.4</version>
-                        <configuration>
-                            <outputDirectory>YOUR WAR DESTINATION</outputDirectory>
-                        <warName>ROOT</warName>
-                        </configuration>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-java2xtend-to-local-repo</id>
+                                <phase>initialize</phase><!-- no default phase -->
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- the "raw" jar file, not the fat one -->
+                                    <file>${project.basedir}/lib/java2xtend-${java2xtend.version}.jar</file>
+                                    <pomFile>${project.basedir}/lib/java2xtend-${java2xtend.version}.pom</pomFile>
+                                    <localRepositoryPath>${maven.repo.local}</localRepositoryPath>
+                                    <groupId>org.eclipse.xtend</groupId>
+                                    <artifactId>java2xtend</artifactId>
+                                    <version>${java2xtend.version}</version>
+                                    <packaging>jar</packaging>
+                                    <!-- 
+                                    <createChecksum>true</createChecksum>
+                                    <generatePom>true</generatePom>
+                                    -->
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
-                -->
                 </plugins>
             </build>
         </profile>
@@ -345,11 +379,10 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>${maven.antrun.plugin.version}</version>
                         <configuration>
                             <target>
                                 <java fork="true" jar="target/${project.build.finalName}-${runnable.classifier}.jar">
-                                    <jvmarg value="-DPORT=${web.port}"/>
+                                    <jvmarg value="-DPORT=${web.port}" />
                                 </java>
                             </target>
                         </configuration>
@@ -375,7 +408,6 @@
  -->
                     <plugin>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>${maven.shade.plugin.version}</version>
                         <configuration>
                             <filters>
                                 <filter>
@@ -413,7 +445,8 @@
         </profile>
         <profile>
         <!-- Package org.eclipse.xtend:java2xtend is not available from any public repository yet.
-             The project "xtend:java2xtend" must be a sibling project of this one, i.e. in the same parent folder. -->
+             This profile must be run from a workstation where the project "java2xtend" is available
+             from the local m2 repository -->
             <id>server-assets</id>
             <activation>
                 <property>
@@ -423,11 +456,61 @@
             <build>
                 <plugins>
                     <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.basedir}/lib</directory>
+                                    <followSymlinks>false</followSymlinks>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>retrieve-j2x-from-local-repo</id>
+                                <phase>initialize</phase><!-- process-sources -->
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.eclipse.xtend</groupId>
+                                            <artifactId>java2xtend</artifactId>
+                                            <version>${java2xtend.version}</version>
+                                            <type>jar</type>
+                                            <outputDirectory>${project.basedir}/lib</outputDirectory>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.eclipse.xtend</groupId>
+                                            <artifactId>java2xtend</artifactId>
+                                            <version>${java2xtend.version}</version>
+                                            <type>pom</type>
+                                            <outputDirectory>${project.basedir}/lib</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+<!--                 
+                    <plugin>
                         <artifactId>maven-install-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>fill-static-in-project-repo</id>
-                                <phase>initialize</phase><!-- no default phase -->
+                                <phase>initialize</phase>< ! - - no default phase - - >
                                 <goals>
                                     <goal>install-file</goal>
                                 </goals>
@@ -444,6 +527,7 @@
                             </execution>
                         </executions>
                     </plugin>
+ -->
                 </plugins>
             </build>
         </profile>
