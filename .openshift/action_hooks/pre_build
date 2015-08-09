@@ -19,7 +19,7 @@ if [ ! -d $OPENSHIFT_DATA_DIR/java ]
         rm -f *.tar.gz
 fi
 
-if [ ! -d $OPENSHIFT_DATA_DIR/apache-maven-3.3.3 ]
+if [ ! -d $OPENSHIFT_DATA_DIR/apache-maven ]
     then 
         export MVN_VERSION=3.3.3 
         echo "$(date): Downloading Maven $MVN_VERSION" >> $LOG
