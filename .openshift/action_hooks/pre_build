@@ -11,7 +11,7 @@ if [ ! -d $OPENSHIFT_DATA_DIR/java ]
     then 
         export JDK_VERSION=jdk1.8.0_51
         export JDK_INSTALL_VERSION=8u51-b16/jdk-8u51
-        echo "Downloading Oracle $JDK_VERSION" >> $LOG
+        echo "$(date): Downloading Oracle $JDK_VERSION" >> $LOG
         cd $OPENSHIFT_DATA_DIR
         wget -c --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/$JDK_INSTALL_VERSION-linux-x64.tar.gz
         tar xvf *.tar.gz
@@ -22,7 +22,7 @@ fi
 if [ ! -d $OPENSHIFT_DATA_DIR/apache-maven-3.3.3 ]
     then 
         export MVN_VERSION=3.3.3 
-        echo "Downloading Maven $MVN_VERSION" >> $LOG
+        echo "$(date): Downloading Maven $MVN_VERSION" >> $LOG
         cd $OPENSHIFT_DATA_DIR
         wget -c http://apache.websitebeheerjd.nl/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.tar.gz
         tar xvf *.tar.gz 
