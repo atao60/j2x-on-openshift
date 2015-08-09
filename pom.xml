@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.eclipse.xtend</groupId>
-    <artifactId>java2xtend-webapp</artifactId>
+    <artifactId>java2xtend-on-openshift</artifactId>
     <version>2.0-SNAPSHOT</version>
 
     <name>Java to Xtend Converter Online</name>
@@ -784,10 +784,14 @@
             </build>
         </profile>
     </profiles>
+
+<!-- 
     <repositories>
         <repository>
             <id>repo</id>
             <url>file://${project.basedir}/repo</url>
         </repository>
     </repositories>
+ -->
+ 
 </project>
