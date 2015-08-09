@@ -2,7 +2,7 @@
 
 set -x
 
-export LOG=$OPENSHIFT_LOG_DIR/out.log
+export LOG=$OPENSHIFT_LOG_DIR/build.log
 
 export M2=$OPENSHIFT_DATA_DIR/apache-maven/bin
 export JAVA_HOME=$OPENSHIFT_DATA_DIR/java
