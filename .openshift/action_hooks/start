@@ -10,8 +10,10 @@ export M2=$OPENSHIFT_DATA_DIR/apache-maven-3.3.3/bin
 export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_51
 export PATH=$JAVA_HOME/bin:$M2:$PATH
 
+export LOG=$OPENSHIFT_LOG_DIR/out.log
+
 export IP_ADDRESS=$OPENSHIFT_DIY_IP
 export PORT=$OPENSHIFT_DIY_PORT
 
 cd $OPENSHIFT_REPO_DIR
-java -jar $OPENSHIFT_REPO_DIR/target/j2x-on-openshift-standalone.jar &
+nohup java -jar $OPENSHIFT_REPO_DIR/target/j2x-on-openshift-standalone.jar > $LOG 2>&1 &

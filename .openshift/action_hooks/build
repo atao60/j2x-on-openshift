@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -x
+
 export M2=$OPENSHIFT_DATA_DIR/apache-maven-3.3.3/bin
 export JAVA_HOME=$OPENSHIFT_DATA_DIR/jdk1.8.0_51
 export PATH=$JAVA_HOME/bin:$M2:$PATH

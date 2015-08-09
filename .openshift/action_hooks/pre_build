@@ -1,9 +1,14 @@
 #!/bin/bash
+
 set -x
+
+# OpenShift.com provides JDK 1.8 here: /etc/alternatives/java_sdk_1.8.0 
+# Currently the version is openjdk-1.8.0.45-28.b13.el6_6.i386
 if [ ! -d $OPENSHIFT_DATA_DIR/jdk1.8.0_51 ]
     then 
         cd $OPENSHIFT_DATA_DIR
-        wget -c --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u51-b16/jdk-8u51-linux-x64.tar.gz
+        export JDK_INSTALL_VERSION=8u51-b16/jdk-8u51
+        wget -c --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/$JDK_INSTALL_VERSION-linux-x64.tar.gz
         tar xvf *.tar.gz 
         rm -f *.tar.gz
 fi
@@ -11,7 +16,8 @@ fi
 if [ ! -d $OPENSHIFT_DATA_DIR/apache-maven-3.3.3 ]
     then 
         cd $OPENSHIFT_DATA_DIR
-        wget -c http://apache.websitebeheerjd.nl/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz
+        export MVN_VERSION=3.3.3 
+        wget -c http://apache.websitebeheerjd.nl/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.tar.gz
         tar xvf *.tar.gz 
         rm -f *.tar.gz
 fi

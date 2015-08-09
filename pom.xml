@@ -396,6 +396,7 @@
                                     <goal>shade</goal>
                                 </goals>
                                 <configuration>
+                                    <finalName>${project.build.finalName}-${runnable.classifier}</finalName>
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>${runnable.classifier}</shadedClassifierName>
                                     <transformers>
