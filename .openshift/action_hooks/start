@@ -6,7 +6,7 @@
 
 set -x
 
-export LOG=$OPENSHIFT_LOG_DIR/app.log
+export LOG=$OPENSHIFT_LOG_DIR/app-$(date +%Y%m%d-%H%M%S).log
 
 export M2=$OPENSHIFT_DATA_DIR/apache-maven/bin
 export JAVA_HOME=$OPENSHIFT_DATA_DIR/java
