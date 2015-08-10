@@ -124,11 +124,6 @@
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>java2xtend</artifactId>
             <version>${java2xtend.version}</version>
-<!-- Jitpack doesn't seem to work with a Nexus server
-            <groupId>github.com.atao60</groupId>
-            <artifactId>java2xtend</artifactId>
-            <version>-SNAPSHOT</version>
- -->            
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -348,37 +343,6 @@
             <properties>
                 <final.name>j2x-on-openshift</final.name>
             </properties>
-            <build>
-            <!-- 
-                <finalName>j2x-on-openshift</finalName>
-                 -->
-<!-- *** Replaced by use of JitPack ***
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-install-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-java2xtend-to-local-repo</id>
-                                <phase>initialize</phase>< ! - - no default phase - - >
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <configuration>
-                                    < ! - - the "raw" jar file, not the fat one - - >
-                                    <file>${project.basedir}/lib/java2xtend-${java2xtend.version}.jar</file>
-                                    <pomFile>${project.basedir}/lib/java2xtend-${java2xtend.version}.pom</pomFile>
-                                    <localRepositoryPath>${maven.repo.local}</localRepositoryPath>
-                                    <groupId>org.eclipse.xtend</groupId>
-                                    <artifactId>java2xtend</artifactId>
-                                    <version>${java2xtend.version}</version>
-                                    <packaging>jar</packaging>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
- -->     
-            </build>
         </profile>
         <profile>
             <id>standalone</id>
@@ -388,37 +352,10 @@
                 </property>
             </activation>
             <build>
-                <!-- To always get the same name for the runnable jar 
-                <finalName>j2x-on-openshift</finalName> 
-                <finalName>${final.name}</finalName>
-                -->
-                <plugins>
-                <!-- TODO: now that generated fat jar with maven shade plugin is working, 
-                           may be try again with Spring Boot maven plugin?                
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${spring.boot.maven.plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>package-runable-jar</id>
-                                <goals>
-                                    <goal>repackage</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <classifier>${runnable.classifier}</classifier>
-                            <mainClass>${main.class}</mainClass>
-                        </configuration>
-                    </plugin>
- -->
-                    <plugin>
+               <plugins>
+                   <plugin>
                         <artifactId>maven-shade-plugin</artifactId>
                         <configuration>
-                        <!-- 
-                            <finalName>j2x-on-openshift</finalName>
-                             -->
                             <filters>
                                 <filter>
                                     <!-- Exclude all signature related files from every artifact, regardless of its group or artifact id -->
@@ -438,15 +375,8 @@
                                     <goal>shade</goal>
                                 </goals>
                                 <configuration>
-                                <!-- 
-                                    <finalName>${project.build.finalName}-${runnable.classifier}</finalName>
-                                    <finalName>j2x-on-openshift-${runnable.classifier}</finalName>
-                                     -->
                                      <finalName>${final.name}-${runnable.classifier}</finalName>
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
-                                    <!-- 
-                                    <shadedClassifierName>${runnable.classifier}</shadedClassifierName>
-                                     -->
                                     <transformers>
                                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                             <mainClass>${main.class}</mainClass>
@@ -466,96 +396,6 @@
                             </target>
                         </configuration>
                     </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-        <!-- Package org.eclipse.xtend:java2xtend is not available from any public repository yet.
-             This profile must be run from a workstation where the project "java2xtend" is available
-             from the local m2 repository -->
-            <id>server-assets</id>
-            <activation>
-                <property>
-                    <name>server-assets</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-<!-- *** Replaced by use of JitPack ***                
-                    <plugin>
-                        <artifactId>maven-clean-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>initialize</phase>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>${project.basedir}/lib</directory>
-                                    <followSymlinks>false</followSymlinks>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>retrieve-j2x-from-local-repo</id>
-                                <phase>initialize</phase>< ! - - process-sources - - >
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.eclipse.xtend</groupId>
-                                            <artifactId>java2xtend</artifactId>
-                                            <version>${java2xtend.version}</version>
-                                            <type>jar</type>
-                                            <outputDirectory>${project.basedir}/lib</outputDirectory>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>org.eclipse.xtend</groupId>
-                                            <artifactId>java2xtend</artifactId>
-                                            <version>${java2xtend.version}</version>
-                                            <type>pom</type>
-                                            <outputDirectory>${project.basedir}/lib</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
--->                    
-<!-- static internal repository: *** replaced by use of dependency:copy ***              
-                    <plugin>
-                        <artifactId>maven-install-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>fill-static-in-project-repo</id>
-                                <phase>initialize</phase>< ! - - no default phase - - >
-                                <goals>
-                                    <goal>install-file</goal>
-                                </goals>
-                                <configuration>
-                                    <localRepositoryPath>static.internal.repository</localRepositoryPath>
-                                    <createChecksum>true</createChecksum>
-                                    <packaging>jar</packaging>
-                                    <generatePom>true</generatePom>
-                                    <file>${project.basedir}/../java2xtend-2/target/java2xtend-2.0-SNAPSHOT.jar</file>
-                                    <groupId>org.eclipse.xtend</groupId>
-                                    <artifactId>java2xtend</artifactId>
-                                    <version>${java2xtend.version}</version>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
- -->
                 </plugins>
             </build>
         </profile>
@@ -658,9 +498,6 @@
                 </property>
             </activation>
             <build>
-            <!-- 
-                <finalName>j2x-on-openshift</finalName>
-                 -->
                 <plugins>
                     <plugin>
                         <artifactId>maven-enforcer-plugin</artifactId>
@@ -822,25 +659,11 @@
             <name>atao60's Github based repo</name>
             <url>https://github.com/atao60/snapshots/raw/master/</url>
         </repository>
-    
-<!-- static internal repository: *** replaced by use of dependency:copy ***  
-        <repository>
-            <id>static-intern-repo</id>
-            <url>file://${static.internal.repository}</url>
-        </repository>
- -->
- <!-- Doesn't seem to work with a Nexus server 
-        <repository>< ! - - Jitpack: builds GitHub projects on demand and publishes ready-to-use packages - - >
-            <id>jitpack-repo</id>
-            <url>https://jitpack.io</url>
-        </repository>
- -->        
         <repository> <!-- Required to get org.eclipse.core:org.eclipse.core.resources:jar:3.8.101.v20130717-0806 -->
             <id>spring-release-plugins</id>
             <name>Spring Release Plugins</name>
             <url>http://repo.spring.io/plugins-release/</url>
        </repository>
-    </repositories>
- 
+    </repositories> 
  
 </project>

@@ -2,12 +2,13 @@
 
 set -x
 
-export LOG=$OPENSHIFT_LOG_DIR/build.log
+export LOG="$OPENSHIFT_LOG_DIR/build-$(date).log"
 
 export M2=$OPENSHIFT_DATA_DIR/apache-maven/bin
 export JAVA_HOME=$OPENSHIFT_DATA_DIR/java
 export PATH=$JAVA_HOME/bin:$M2:$PATH
 
 cd $OPENSHIFT_REPO_DIR
-echo $(date)
+echo "Build starting at $(date)" >> $LOG
 mvn -e -Dmaven.repo.local=$OPENSHIFT_DATA_DIR/.m2/repository clean package -Dmaven.test.skip=true -Pstandalone -Popenshift >> $LOG 2>&1 &
+echo "Build finished at $(date)" >> $LOG 
