@@ -24,6 +24,7 @@ class Bootstrap {
     static val SUB_TEMPLATE_NAME_FTL = "templateName"
 
     static val BASE_ROUTE = "/"
+    static val DEFAULT_ROUTE = "*"
     
     def static void main(String[] args) {
         
@@ -57,7 +58,7 @@ class Bootstrap {
             new ModelAndView(attributes, "layout.ftl")
             ], freeMarkerEngine)
         
-        get("*", [res, req | 
+        get(DEFAULT_ROUTE, [res, req | 
             extension val attributes = <String, Object>newHashMap
             put(SUB_TEMPLATE_NAME_FTL, "404.ftl")
             new ModelAndView(attributes, "layout.ftl")
