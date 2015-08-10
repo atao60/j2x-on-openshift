@@ -57,5 +57,11 @@ class Bootstrap {
             new ModelAndView(attributes, "layout.ftl")
             ], freeMarkerEngine)
         
+        get("*", [res, req | 
+            extension val attributes = <String, Object>newHashMap
+            put(SUB_TEMPLATE_NAME_FTL, "404.ftl")
+            new ModelAndView(attributes, "layout.ftl")
+            ], freeMarkerEngine)
+            
     }
 }
