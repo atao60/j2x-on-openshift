@@ -16,5 +16,6 @@ export IP_ADDRESS=$OPENSHIFT_DIY_IP
 export PORT=$OPENSHIFT_DIY_PORT
 
 cd $OPENSHIFT_REPO_DIR
-echo $(date) >> $LOG
-nohup java -jar $OPENSHIFT_REPO_DIR/target/j2x-on-openshift-standalone.jar >> $LOG 2>&1 &
+touch "$LOG"
+echo $(date) >> "$LOG"
+nohup java -jar $OPENSHIFT_REPO_DIR/target/j2x-on-openshift-standalone.jar >> "$LOG" 2>&1 &
