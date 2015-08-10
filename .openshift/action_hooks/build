@@ -11,5 +11,5 @@ export PATH=$JAVA_HOME/bin:$M2:$PATH
 cd $OPENSHIFT_REPO_DIR
 touch "$LOG"
 echo "Build starting at $(date)" >> "$LOG"
-mvn -e -Dmaven.repo.local=$OPENSHIFT_DATA_DIR/.m2/repository clean package -Dmaven.test.skip=true -Pstandalone -Popenshift >> "$LOG" 2>&1 &
+mvn -e -Dmaven.repo.local=$OPENSHIFT_DATA_DIR/.m2/repository -Dfinal.name=j2x-on-openshift clean package -Dmaven.test.skip=true -Pstandalone >> "$LOG" 2>&1 &
 echo "Build finished at $(date)" >> "$LOG" 
