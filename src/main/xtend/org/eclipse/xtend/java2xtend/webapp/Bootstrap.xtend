@@ -10,7 +10,7 @@ import static spark.Spark.post
 import static spark.SparkBase.*
 import org.eclipse.xtend.java2xtend.converter.DefaultConvertConfig
 
-class Bootstrap {
+class Bootstrap { 
     
     static val PORT_TAG = "PORT"
     static val IP_ADDRESS_TAG = "IP_ADDRESS"
