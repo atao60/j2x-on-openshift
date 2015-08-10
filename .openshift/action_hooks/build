@@ -10,4 +10,4 @@ export PATH=$JAVA_HOME/bin:$M2:$PATH
 
 cd $OPENSHIFT_REPO_DIR
 echo $(date)
-mvn -e -Dmaven.repo.local=$OPENSHIFT_DATA_DIR/.m2/repository clean package -Pstandalone -Popenshift >> $LOG 2>&1 &
+mvn -e -Dmaven.repo.local=$OPENSHIFT_DATA_DIR/.m2/repository clean package -Dmaven.test.skip=true -Pstandalone -Popenshift >> $LOG 2>&1 &
