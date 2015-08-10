@@ -44,13 +44,13 @@
     <div>
     <p>This service uses the Java to Xtend 
     <a id="xtendJavaConverter" href="https://github.com/eclipse/xtext/blob/2.9.0.beta3/plugins/org.eclipse.xtend.core/src/org/eclipse/xtend/core/javaconverter/JavaConverter.xtend">
-    converter</a> provided by Xtend itself since its version 2.8. The version used is the 2.9.3 Beta3.
+    converter</a> provided by Xtend itself since its version 2.8. The version used is the 2.9.0 Beta3.
     </p>
     </div>
     <div style="margin-top: 2em;">
     <p>For any question about Xtend or the Xtend generated code, 
        see <a id="xtendDoc" href="https://eclipse.org/xtend/community.html">here</a>.</p>
     <p>About any issue on this online service itself, you can report it 
-       <a id="reportBug" href="https://github.com/atao60/j2x-webapp/issues">here</a>.</p>
+       <a id="reportBug" href="https://github.com/atao60/java2xtend/issues">here</a>.</p>
     </div>
 </div>

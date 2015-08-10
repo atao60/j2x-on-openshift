@@ -12,7 +12,7 @@ import org.eclipse.xtend.java2xtend.converter.DefaultConvertConfig
 
 class Bootstrap {
     
-    static val PORT_TAG = "PORT" 
+    static val PORT_TAG = "PORT"
     static val IP_ADDRESS_TAG = "IP_ADDRESS"
 
     static val JAVA_CODE_TAG = "java-code"

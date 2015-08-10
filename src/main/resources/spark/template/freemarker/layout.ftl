@@ -35,7 +35,7 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="/"><span class="glyphicon glyphicon-pencil">Convert Java Code</a></li>
+                        <li class="active"><a href="https://eclipse.org/xtend/"><span class="glyphicon glyphicon-cog">Xtend</a></li>
                     </ul>
                 </div>
             </div>

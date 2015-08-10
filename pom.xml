@@ -23,6 +23,8 @@
 
         <main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</main.class>
         <runnable.classifier>standalone</runnable.classifier>
+        
+        <static.internal.repository>${project.basedir}/repo</static.internal.repository>
 
         <lib.minified />                <!-- nothing (dev) or '.min' (prod) -->
     
@@ -72,7 +74,7 @@
         <!-- Dependencies -->
 
         <!-- Server side -->
-        <java2xtend.version>2.0-SNAPSHOT</java2xtend.version>
+        <java2xtend.version>2.0-SNAPSHOT</java2xtend.version><!-- 2.0-SNAPSHOT -->
 
         <xtend.version>${xtendVersion}</xtend.version>
         <spark.core.version>2.2</spark.core.version>
@@ -119,6 +121,11 @@
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>java2xtend</artifactId>
             <version>${java2xtend.version}</version>
+<!-- Jitpack doesn't seem to work with a Nexus server
+            <groupId>github.com.atao60</groupId>
+            <artifactId>java2xtend</artifactId>
+            <version>-SNAPSHOT</version>
+ -->            
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -337,17 +344,18 @@
             <build>
                 <finalName>j2x-on-openshift</finalName>
                 <plugins>
+<!-- *** Replaced by use of JitPack ***
                     <plugin>
                         <artifactId>maven-install-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>copy-java2xtend-to-local-repo</id>
-                                <phase>initialize</phase><!-- no default phase -->
+                                <phase>initialize</phase>< ! - - no default phase - - >
                                 <goals>
                                     <goal>install-file</goal>
                                 </goals>
                                 <configuration>
-                                    <!-- the "raw" jar file, not the fat one -->
+                                    < ! - - the "raw" jar file, not the fat one - - >
                                     <file>${project.basedir}/lib/java2xtend-${java2xtend.version}.jar</file>
                                     <pomFile>${project.basedir}/lib/java2xtend-${java2xtend.version}.pom</pomFile>
                                     <localRepositoryPath>${maven.repo.local}</localRepositoryPath>
@@ -355,14 +363,11 @@
                                     <artifactId>java2xtend</artifactId>
                                     <version>${java2xtend.version}</version>
                                     <packaging>jar</packaging>
-                                    <!-- 
-                                    <createChecksum>true</createChecksum>
-                                    <generatePom>true</generatePom>
-                                    -->
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
+ -->     
                 </plugins>
             </build>
         </profile>
@@ -387,7 +392,8 @@
                             </target>
                         </configuration>
                     </plugin>
-<!--                 
+<!-- TODO: now that generated fat jar with maven shade plugin is working, 
+           may be try again with Spring Boot maven plugin?                
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -455,6 +461,7 @@
             </activation>
             <build>
                 <plugins>
+<!-- *** Replaced by use of JitPack ***                
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <executions>
@@ -479,7 +486,7 @@
                         <executions>
                             <execution>
                                 <id>retrieve-j2x-from-local-repo</id>
-                                <phase>initialize</phase><!-- process-sources -->
+                                <phase>initialize</phase>< ! - - process-sources - - >
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
@@ -504,7 +511,8 @@
                             </execution>
                         </executions>
                     </plugin>
-<!--                 
+-->                    
+<!-- static internal repository: *** replaced by use of dependency:copy ***              
                     <plugin>
                         <artifactId>maven-install-plugin</artifactId>
                         <executions>
@@ -515,7 +523,7 @@
                                     <goal>install-file</goal>
                                 </goals>
                                 <configuration>
-                                    <localRepositoryPath>${project.basedir}/repo</localRepositoryPath>
+                                    <localRepositoryPath>static.internal.repository</localRepositoryPath>
                                     <createChecksum>true</createChecksum>
                                     <packaging>jar</packaging>
                                     <generatePom>true</generatePom>
@@ -785,16 +793,26 @@
         </profile>
     </profiles>
 
-<!-- 
     <repositories>
         <repository>
-            <id>repo</id>
-            <url>file://${project.basedir}/repo</url>
+            <id>github-atao60</id>
+            <name>atao60's Github based repo</name>
+            <url>https://github.com/atao60/snapshots/raw/master/</url>
         </repository>
-    </repositories>
- -->
-    <repositories>
+    
+<!-- static internal repository: *** replaced by use of dependency:copy ***  
         <repository>
+            <id>static-intern-repo</id>
+            <url>file://${static.internal.repository}</url>
+        </repository>
+ -->
+ <!-- Doesn't seem to work with a Nexus server 
+        <repository>< ! - - Jitpack: builds GitHub projects on demand and publishes ready-to-use packages - - >
+            <id>jitpack-repo</id>
+            <url>https://jitpack.io</url>
+        </repository>
+ -->        
+        <repository> <!-- Required to get org.eclipse.core:org.eclipse.core.resources:jar:3.8.101.v20130717-0806 -->
             <id>spring-release-plugins</id>
             <name>Spring Release Plugins</name>
             <url>http://repo.spring.io/plugins-release/</url>
