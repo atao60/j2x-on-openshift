@@ -9,6 +9,8 @@ import static spark.Spark.get
 import static spark.Spark.post
 import static spark.SparkBase.*
 import org.eclipse.xtend.java2xtend.converter.DefaultConvertConfig
+import java.util.Locale
+import java.util.Arrays
 
 class Bootstrap { 
     
@@ -26,13 +28,17 @@ class Bootstrap {
     static val BASE_ROUTE = "/"
     static val DEFAULT_ROUTE = "*"
     
+    static val DEFAULT_LOCALE = Locale.US
+    static val LANGUAGE_TAG = "language"
+    static val COUNTRY_TAG = "country"
+    
     def static void main(String[] args) {
         
         val injector = new XtendStandaloneSetup().createInjectorAndDoEMFRegistration
         extension val j2xConverter = injector.getInstance(Convert).configure(new DefaultConvertConfig)
 
-        port(Integer.parseInt(System.getenv(PORT_TAG)?: System.getProperty(PORT_TAG)?: "8080"))
-        ipAddress(System.getenv(IP_ADDRESS_TAG)?: System.getProperty(IP_ADDRESS_TAG)?: "localhost")
+        initWebConfig
+        initI18nConfig
         
         val freeMarkerEngine = new FreeMarkerEngine
 
@@ -65,4 +71,25 @@ class Bootstrap {
             ], freeMarkerEngine)
             
     }
+    
+    private static def initI18nConfig() {
+        val languageParam = System.getenv(LANGUAGE_TAG)?: System.getProperty(LANGUAGE_TAG)?: DEFAULT_LOCALE.language
+        val countryParam = System.getenv(COUNTRY_TAG)?: System.getProperty(COUNTRY_TAG)?: DEFAULT_LOCALE.country
+        var currentLocale = new Locale.Builder().setLanguage(languageParam).setLanguage(countryParam).build
+        if (isLocaleAvailable(currentLocale))
+        {
+            currentLocale = DEFAULT_LOCALE
+        }
+    }
+    
+    private static def initWebConfig() {
+        port(Integer.parseInt(System.getenv(PORT_TAG)?: System.getProperty(PORT_TAG)?: "8080"))
+        ipAddress(System.getenv(IP_ADDRESS_TAG)?: System.getProperty(IP_ADDRESS_TAG)?: "localhost")
+        
+    }
+    
+    private static def isLocaleAvailable(Locale locale) {
+        Arrays.asList(Locale.getAvailableLocales()).contains(locale)
+    }
+    
 }

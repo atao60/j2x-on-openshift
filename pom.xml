@@ -659,11 +659,13 @@
             <name>atao60's Github based repo</name>
             <url>https://github.com/atao60/snapshots/raw/master/</url>
         </repository>
-        <repository> <!-- Required to get org.eclipse.core:org.eclipse.core.resources:jar:3.8.101.v20130717-0806 -->
+        <!-- Required to get org.eclipse.core:org.eclipse.core.resources:jar:3.8.101.v20130717-0806 
+        <repository> 
             <id>spring-release-plugins</id>
             <name>Spring Release Plugins</name>
             <url>http://repo.spring.io/plugins-release/</url>
        </repository>
+       -->
     </repositories> 
  
 </project>
