@@ -53,6 +53,6 @@
     <p>For any question about Xtend or the Xtend generated code, 
        see <a id='xtendDoc' href='https://eclipse.org/xtend/community.html'>here</a>.</p>
     <p>About any issue on this online service itself, you can report it 
-       <a id='reportBug' href='https://github.com/atao60/java2xtend/issues'>here</a>.</p>
+       <a id='reportBug' href='https://github.com/atao60/j2x-on-openshift/issues'>here</a>.</p>
     </div>
 </div>
