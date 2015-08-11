@@ -16,7 +16,7 @@ Licenses & credits
 
 Licenced under [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html).
 
-There is a first attempt to provide an online converter, see [Krzysztof Rzymkowski project](https://github.com/rzymek/java2xtend.webapp). This [service](http://www.j2x.cloudbees.net/] is not currently available.
+There is a first attempt to provide an online converter, see [Krzysztof Rzymkowski project](https://github.com/rzymek/java2xtend.webapp). This [service](http://www.j2x.cloudbees.net/) is not currently available.
 
 Requirements
 -----
