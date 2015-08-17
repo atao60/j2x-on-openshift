@@ -1,7 +1,6 @@
 package org.eclipse.xtend.java2xtend.webapp
 
 import org.eclipse.xtend.core.XtendStandaloneSetup
-import org.eclipse.xtend.java2xtend.converter.Convert
 import spark.ModelAndView
 import spark.template.freemarker.FreeMarkerEngine
 
@@ -11,6 +10,8 @@ import static spark.SparkBase.*
 import org.eclipse.xtend.java2xtend.converter.DefaultConvertConfig
 import java.util.Locale
 import java.util.Arrays
+import org.eclipse.xtend.java2xtend.converter.StringConverter
+import org.eclipse.xtend.java2xtend.converter.DefaultStringConverter
 
 class Bootstrap { 
     
@@ -32,16 +33,22 @@ class Bootstrap {
     static val LANGUAGE_TAG = "language"
     static val COUNTRY_TAG = "country"
     
+    extension StringConverter j2xConverter
+    FreeMarkerEngine freeMarkerEngine 
+    
     def static void main(String[] args) {
         
-        val injector = new XtendStandaloneSetup().createInjectorAndDoEMFRegistration
-        extension val j2xConverter = injector.getInstance(Convert).configure(new DefaultConvertConfig)
+        new Bootstrap() => [
+            initConverter
+            initWebConfig
+            initI18nConfig
+            initTemplateEngine
+            mapRoutes
+        ]
 
-        initWebConfig
-        initI18nConfig
-        
-        val freeMarkerEngine = new FreeMarkerEngine
-
+    }
+    
+    private def mapRoutes() {
         get(BASE_ROUTE, [res, req | 
             extension val attributes = <String, Object>newHashMap
             put(JAVA_CODE_FTL, JAVA_CODE_TAG)
@@ -52,9 +59,10 @@ class Bootstrap {
             ], freeMarkerEngine)
         
         post(BASE_ROUTE, [extension req, extension res | 
-            extension val attributes = <String, Object>newHashMap
             val javaCode = JAVA_CODE_TAG.queryParams
             val xtendCode = javaCode(javaCode).xtendCode
+
+            extension val attributes = <String, Object>newHashMap
             put("javaContent", javaCode)
             put("xtendContent", xtendCode)
             put(JAVA_CODE_FTL, JAVA_CODE_TAG)
@@ -64,12 +72,24 @@ class Bootstrap {
             new ModelAndView(attributes, "layout.ftl")
             ], freeMarkerEngine)
         
+        /* Spark java doesn't really help with 404 page: this workaround only works
+         * as long as no images, static files, ... are used.
+         */
         get(DEFAULT_ROUTE, [res, req | 
             extension val attributes = <String, Object>newHashMap
             put(SUB_TEMPLATE_NAME_FTL, "404.ftl")
             new ModelAndView(attributes, "layout.ftl")
             ], freeMarkerEngine)
-            
+        
+    }
+    
+    private def initTemplateEngine() {
+        freeMarkerEngine = new FreeMarkerEngine
+    }
+    
+    private def initConverter() {
+        val injector = new XtendStandaloneSetup().createInjectorAndDoEMFRegistration
+        j2xConverter = injector.getInstance(DefaultStringConverter).configure(new DefaultConvertConfig)
     }
     
     private static def initI18nConfig() {

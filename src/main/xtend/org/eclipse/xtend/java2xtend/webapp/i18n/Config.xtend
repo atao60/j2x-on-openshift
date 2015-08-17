@@ -6,7 +6,7 @@ import java.util.Locale
 import javax.inject.Provider
 
 import freemarker.template.Configuration
-import freemarker.template.Template
+//import freemarker.template.Template
 
 /*
  * https://github.com/oehme/freemarker-I18n/blob/master/src/main/java/de/oehme/examples/freemarkerI18n/easyway/configuration/Config.java
