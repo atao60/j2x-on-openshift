@@ -16,7 +16,7 @@ Licenses & credits
 
 Licenced under [Eclipse Public License](http://www.eclipse.org/legal/epl-v10.html).
 
-There is a first attempt to provide an online converter, see [Krzysztof Rzymkowski project](https://github.com/rzymek/java2xtend.webapp). This [service](http://www.j2x.cloudbees.net/) is not currently available.
+A first attempt to provide an online converter was made by [Krzysztof Rzymkowski project](https://github.com/rzymek/java2xtend.webapp). This [service](http://www.j2x.cloudbees.net/) is not currently available.
 
 Requirements
 -----
@@ -36,10 +36,15 @@ If working under *Eclipse*:
 Build & deploy
 ------
 
-This project is store in two git repositories :
+This project is store in two git repositories:
 
 - the *OpenShift* one: it's mandatory as it's the mean used by *OpenShift* to deploy any application on its platform.
-- the [Github](https://github.com) one: it's required to get a public git repository as the *OpenShift* git is private.
+- this source code repository on [Github](https://github.com) as a public one since the *OpenShift* repository is private.
 
-The local repository is synchronized with both the git repositories. A single command is enough to update both the remote repositories : 
-       `git push`
+The local repository is synchronized with both the git repositories. A single command is enough to update them:  
+
+    cd <local workspace path>j2x-on-openshift
+    git commit -m "New commit"
+    git push
+
+       
