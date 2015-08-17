@@ -23,8 +23,9 @@
 
         <main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</main.class>
         <runnable.classifier>standalone</runnable.classifier>
-        <!-- To always get the same name for standard and runnable jar-s 
-             but without any version when on OpenShift -->
+        <!-- To always get the same name for standard and runnable jar-s. 
+             When used under OpenShift, a value can be provided from the command line,
+             e.g. -Dfinal.name=j2x-on-openshift -->
         <final.name>${project.artifactId}-${project.version}</final.name>
         
         <static.internal.repository>${project.basedir}/repo</static.internal.repository>
@@ -47,8 +48,8 @@
         <maven.compiler.fork>true</maven.compiler.fork>
         
         <!-- Maven and plugins -->
-        <maven.minimal.version>3.3.1</maven.minimal.version>
         <!-- Polyglot for Maven requires 3.3.1+ -->
+        <maven.minimal.version>3.3.1</maven.minimal.version>
 
         <xtendVersion>2.9.0.beta3</xtendVersion>
         <xtend.outputDir>${project.build.directory}/xtend-gen/main</xtend.outputDir>
@@ -77,32 +78,25 @@
         <!-- Dependencies -->
 
         <!-- Server side -->
-        <java2xtend.version>2.0-SNAPSHOT</java2xtend.version><!-- 2.0-SNAPSHOT -->
+        <java2xtend.version>2.0-SNAPSHOT</java2xtend.version>
 
         <xtend.version>${xtendVersion}</xtend.version>
         <spark.core.version>2.2</spark.core.version>
-        <!-- 2.0.0 -->
         <spark.freemarker.version>2.0.0</spark.freemarker.version>
-        <!-- 2.0.0 -->
         
         <!-- Client side -->
         <bootstrap.version>3.3.5</bootstrap.version>
-        <!-- 3.0.2, 3.3.5 -->
         <jquery.version>1.11.3</jquery.version>
-        <!-- 1.10.2, 1.11.3 -->
         
         <!-- Html5shiv provides a JavaScript workaround to enable styling of HTML5 elements
          in versions of Internet Explorer prior to version 9, which do not
          allow unknown elements to be styled  without JavaScript.  -->
         <html5shiv.version>3.7.2</html5shiv.version>
-        <!-- 3.7.2 -->
         <!-- Respond is a fast & lightweight polyfill for min/max-width CSS3 Media Queries (for IE 6-8, and more)  -->
         <respond.version>1.4.2</respond.version>
-        <!-- 1.4.2 -->
         <!-- Fontawesome provides scalable vector icons that can instantly be customized
          — size, color, drop shadow, and anything that can be done with the power of CSS.  -->
         <fontawesome.version>4.4.0</fontawesome.version>
-        <!-- 4.2.0, 4.4.0 -->
         
         <!-- logs -->
         <slf4j.version>1.7.12</slf4j.version>
@@ -390,7 +384,7 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <configuration>
                             <target>
-                                <java fork="true" jar="target/${project.build.finalName}-${runnable.classifier}.jar">
+                                <java fork="true" jar="target/${final.name}-${runnable.classifier}.jar">
                                     <jvmarg value="-DPORT=${web.port}" />
                                 </java>
                             </target>
@@ -655,17 +649,10 @@
 
     <repositories>
         <repository>
-            <id>github-atao60</id>
-            <name>atao60's Github based repo</name>
+            <id>atao60-snapshot-repo</id>
+            <name>atao60's snapshot Maven repository on Github</name>
             <url>https://github.com/atao60/snapshots/raw/master/</url>
         </repository>
-        <!-- Required to get org.eclipse.core:org.eclipse.core.resources:jar:3.8.101.v20130717-0806 
-        <repository> 
-            <id>spring-release-plugins</id>
-            <name>Spring Release Plugins</name>
-            <url>http://repo.spring.io/plugins-release/</url>
-       </repository>
-       -->
     </repositories> 
  
 </project>
