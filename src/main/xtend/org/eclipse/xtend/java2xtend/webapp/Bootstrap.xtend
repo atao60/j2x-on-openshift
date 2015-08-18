@@ -26,6 +26,8 @@ class Bootstrap {
     static val ACTION_ROUTE_FTL = "actionRoute"
     static val SUB_TEMPLATE_NAME_FTL = "templateName"
 
+    static val DEFAULT_PORT = "8080"
+    static val DEFAULT_IP_ADDRESS = "localhost"
     static val BASE_ROUTE = "/"
     static val DEFAULT_ROUTE = "*"
     
@@ -103,8 +105,8 @@ class Bootstrap {
     }
     
     private static def initWebConfig() {
-        port(Integer.parseInt(System.getenv(PORT_TAG)?: System.getProperty(PORT_TAG)?: "8080"))
-        ipAddress(System.getenv(IP_ADDRESS_TAG)?: System.getProperty(IP_ADDRESS_TAG)?: "localhost")
+        port(Integer.parseInt(System.getenv(PORT_TAG)?: System.getProperty(PORT_TAG)?: DEFAULT_PORT))
+        ipAddress(System.getenv(IP_ADDRESS_TAG)?: System.getProperty(IP_ADDRESS_TAG)?: DEFAULT_IP_ADDRESS)
         
     }
     
