@@ -19,7 +19,7 @@
 
     <properties>
 
-        <web.port>8082</web.port>
+        <web.port>8083</web.port>
 
         <main.class>org.eclipse.xtend.java2xtend.webapp.Bootstrap</main.class>
         <runnable.classifier>standalone</runnable.classifier>
@@ -150,6 +150,18 @@
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-template-freemarker</artifactId>
             <version>${spark.freemarker.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.23</version>
+        </dependency>
+        
+        <!-- i18n -->
+        <dependency>
+            <groupId>ch.qos.cal10n</groupId>
+            <artifactId>cal10n-api</artifactId>
+            <version>0.8.1</version>
         </dependency>
         
         <!-- xtend -->

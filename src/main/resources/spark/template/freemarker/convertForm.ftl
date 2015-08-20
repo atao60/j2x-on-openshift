@@ -1,5 +1,4 @@
-<h4>Don't waste your time to translate yourself your Java code, 
-    let the <a id='xtend' href='https://eclipse.org/xtend'>Xtend</a> converter do it!</h4>
+<h4>${i18n.TITLE}</h4>
 
 <div class='starter-template'>
     <form class='form-horizontal'
@@ -9,7 +8,7 @@
           action='${actionRoute}'>
           
    <input type='submit' 
-           value='Convert from Java to Xtend' 
+           value='${i18n.CONVERT_COMMAND}' 
            class='btn btn-primary' 
            form='j2x-convert-form' />
     
@@ -24,7 +23,7 @@
               autofocus='true'
               draggable='false'
               style='resize: none;'
-              placeholder='Paste your Java code here'>${javaContent!}</textarea>
+              placeholder='${i18n.PASTE_JAVA_PLACE_HOLDER}'>${javaContent!}</textarea>
     </div>
     
     <div class='col-xs-6'>
@@ -37,22 +36,17 @@
               readonly='true'
               draggable='false'
               style='resize: none;'
-              placeholder='No generated Xtend code yet'>${xtendContent!}</textarea>
+              placeholder='${i18n.GENERATED_CODE_PLACE_HOLDER}'>${xtendContent!}</textarea>
     </div>
     </div>
 
     </form>
 
     <div>
-    <p>This service uses the Java to Xtend 
-    <a id='xtendJavaConverter' href="https://github.com/eclipse/xtext/blob/2.9.0.beta3/plugins/org.eclipse.xtend.core/src/org/eclipse/xtend/core/javaconverter/JavaConverter.xtend">
-    converter</a> provided by Xtend itself since its version 2.8. The version used is the 2.9.0 Beta3.
-    </p>
+    <p>${i18n.CREDITS}</p>
     </div>
     <div style='margin-top: 2em;'>
-    <p>For any question about Xtend or the Xtend generated code, 
-       see <a id='xtendDoc' href='https://eclipse.org/xtend/community.html'>here</a>.</p>
-    <p>About any issue on this online service itself, you can report it 
-       <a id='reportBug' href='https://github.com/atao60/j2x-on-openshift/issues'>here</a>.</p>
+    <p>${i18n.XTEND_CONTACT}</p>
+    <p>${i18n.J2X_ISSUE}</p>
     </div>
 </div>
