@@ -21,6 +21,7 @@ public enum Messages {
     CREDITS,
     XTEND_CONTACT,
     J2X_ISSUE,
+    I18N_READY,
     
     TITLE_404,
     MESSAGE_404

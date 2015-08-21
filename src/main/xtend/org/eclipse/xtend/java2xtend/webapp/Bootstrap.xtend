@@ -138,6 +138,7 @@ class Bootstrap {
             Messages.GENERATED_CODE_PLACE_HOLDER -> #[],
             Messages.CREDITS -> #[],
             Messages.XTEND_CONTACT -> #[],
+            Messages.I18N_READY -> #[],
             Messages.J2X_ISSUE -> #[]
           ).labels)
         labels

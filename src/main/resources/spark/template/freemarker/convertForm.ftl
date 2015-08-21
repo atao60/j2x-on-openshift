@@ -43,6 +43,7 @@
     </form>
 
     <div>
+    <p>${i18n.I18N_READY}</p>
     <p>${i18n.CREDITS}</p>
     </div>
     <div style='margin-top: 2em;'>
