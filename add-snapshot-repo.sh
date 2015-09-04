@@ -15,4 +15,4 @@ sed -i -e '\|<id>standard-with-extra-repos</id>|,\|</repositories>| {\|</reposit
                     </snapshots>\
                     <url>https://github.com/atao60/snapshots/raw/master/</url>\
                 </repository>
-' -e '}' ~/.m2/settings.xml
+' -e '}' $1
