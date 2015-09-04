@@ -4,6 +4,8 @@ jdk:
 env:
   global:
     secure: B7GYR7908p5JaA+DHvbrbXtO44u1diGJ9sp8mupSxmuMHK2r09Jmo1dfDPpYMxK0hUSsls2X3e+hul54u3lu0qQgl4iSJuT+9Q39MZ7apzCnCFJp3K+le/3ry8G9tn+w5//gKTraishzkj3/fqO2ZLZkNl2HXgnZmnqGK+pGRNcnhj5n83hEcD7PL84hnLL4xgigroQ45wd+by5hAztOK/dumDcWphSDDR1KnEf0Xh/lF5V1WXi+r6jB5EBKRDgVcyL3ZuR8iX2vs7gkrpizJnYShZQo83Ze1PhUVa5dx4C+WrZtB974S+fY9o58ug4D4KzqvtbBd/bcCkpuy119dOyQ6hgjxhBokXygNtkPc4b1z1PgWvV8dKCQQrLpAiIdSMxyuAk5cJi4EJAHQlUIfyFnBN+LVDhsXju7m4UpVKi5EXV1MhrbQtIJiJnO2W/PuMwjMtQ9ExT9hy1bTWKI0oLzDhUzTPwbdpNPFQFBOoH2/oDOGOczQ43uKjrM4OqC1kBcvUMxa+VCsQby4/hSdXeJuPypOw5qjl0GSUugdXDjGTyXQvFdnSYpC8MoZRbxXN++RCPrtfdXgnkkVA1anYJb8O62WLsq5pinlUdL6WITZyjlhIk2h1u6YuT03Mvx3T2ZI5e+G239yaDouGgNCco1RQTmv6NA4aI3EF4ZrsA=
+before_install:
+  - sed -i.bak -e 's|https://nexus.codehaus.org/snapshots/|https://oss.sonatype.org/content/repositories/codehaus-snapshots/|g' ~/.m2/settings.xml
 deploy:
   provider: openshift
   user: $OPENSHIFT_USERNAME
