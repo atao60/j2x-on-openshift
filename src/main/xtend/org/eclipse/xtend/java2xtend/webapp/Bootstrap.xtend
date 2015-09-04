@@ -1,20 +1,20 @@
 package org.eclipse.xtend.java2xtend.webapp
 
-import ch.qos.cal10n.MessageParameterObj
+import static extension org.eclipse.xtend.java2xtend.i18n.Messages.*
+
 import freemarker.template.Configuration
 import java.util.Arrays
 import java.util.HashMap
-import java.util.List
 import java.util.Locale
 import java.util.Map
-import javax.inject.Provider
 import org.eclipse.xtend.core.XtendStandaloneSetup
-import org.eclipse.xtend.java2xtend.config.I18nWrapper
 import org.eclipse.xtend.java2xtend.converter.DefaultConvertConfig
 import org.eclipse.xtend.java2xtend.converter.DefaultStringConverter
 import org.eclipse.xtend.java2xtend.converter.StringConverter
-import org.eclipse.xtend.java2xtend.i18n.Messages
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.xbase.lib.Functions.Function2
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spark.ModelAndView
 import spark.Request
 import spark.Response
@@ -22,8 +22,6 @@ import spark.Spark
 import spark.template.freemarker.FreeMarkerEngine
 
 import static spark.SparkBase.*
-import org.slf4j.LoggerFactory
-import org.slf4j.Logger
 
 class Bootstrap {
 
@@ -45,7 +43,6 @@ class Bootstrap {
     static val BASE_ROUTE = "/"
     static val DEFAULT_ROUTE = "*"
 
-    static val DEFAULT_LOCALE = Locale.US
     static val LANGUAGE_TAG = "language"
     static val COUNTRY_TAG = "country"
     
@@ -53,10 +50,10 @@ class Bootstrap {
 
     extension StringConverter j2xConverter
     FreeMarkerEngine freeMarkerEngine
-    Locale locale
+    Locale forcedlocale = null
 
     def static void main(String[] args) {
-
+        
         new Bootstrap() => [
             initConverter
             initWebConfig
@@ -68,18 +65,18 @@ class Bootstrap {
 
     private def mapping() {
         get(BASE_ROUTE, "convertForm", [ req, res | 
-            locale = req.userAgentLocale
+            var locale = req.locale
 
             return <String, Object>newHashMap(
                 JAVA_CODE_TPL_TAG -> JAVA_CODE_TAG,
                 XTEND_CODE_TPL_TAG -> XTEND_CODE_TAG,
                 ACTION_ROUTE_TPL_TAG -> BASE_ROUTE,
-                LABELS_TPL_TAG -> convertFormLabels
+                LABELS_TPL_TAG -> locale.convertFormLabels
             )
         ])
 
         post(BASE_ROUTE, "convertForm", [ extension req, res |
-            locale = req.userAgentLocale
+            var locale = req.locale
 
             val javaCode = JAVA_CODE_TAG.queryParams
             val xtendCode = javaCode(javaCode).xtendCode
@@ -90,7 +87,7 @@ class Bootstrap {
                 JAVA_CODE_TPL_TAG -> JAVA_CODE_TAG,
                 XTEND_CODE_TPL_TAG -> XTEND_CODE_TAG,
                 ACTION_ROUTE_TPL_TAG -> BASE_ROUTE,
-                LABELS_TPL_TAG -> convertFormLabels
+                LABELS_TPL_TAG -> locale.convertFormLabels
             )
         ])
 
@@ -98,65 +95,68 @@ class Bootstrap {
          * as long as no images, static files, ... are used.
          */
         get(DEFAULT_ROUTE, "404", [ req, res | 
-            locale = req.userAgentLocale
+            var locale = req.locale
 
             return <String, Object>newHashMap(
-                LABELS_TPL_TAG -> get404Labels
+                LABELS_TPL_TAG -> locale.get404Labels
             )
         ])
 
     }
+    
+    private def getLocale(Request req) {
+        forcedlocale?: req.userAgentLocale
+    }
    
-    private def getLayoutLables() {
-        val labels = <Messages, List<Object>>newHashMap(
-//            Messages.LANGUAGE -> #[],
-            Messages.LAYOUT_HEAD_TITLE -> #[],
-            Messages.WELCOME_HOME_MENU -> #[],
-            Messages.GO_TO_XTEND_MENU -> #[],
-            Messages.FORK_ME_ON_GITHUB -> #[]
-          ).labels
-          
-        labels.put(Messages.LANGUAGE.name, locale.language)  
-        labels
+    private def get404Labels(Locale locale) {
+        (new I18nMap(
+            locale.TITLE_404,
+            locale.MESSAGE_404(BASE_ROUTE)) => [
+                putAll(locale.getLayoutLabels)
+            ]).map
     }
-    
-    private def get404Labels() {
-        val labels = layoutLables
-        labels.putAll(newHashMap(
-            Messages.TITLE_404 -> #[],
-            Messages.MESSAGE_404 -> #[BASE_ROUTE as Object]
-          ).labels)
-        labels
-    }
-    
-    private def getConvertFormLabels() {
-        val labels = layoutLables
-        labels.putAll(newHashMap(
-            Messages.TITLE -> #[],
-            Messages.CONVERT_COMMAND -> #[],
-            Messages.PASTE_JAVA_PLACE_HOLDER -> #[],
-            Messages.GENERATED_CODE_PLACE_HOLDER -> #[],
-            Messages.CREDITS -> #[],
-            Messages.XTEND_CONTACT -> #[],
-            Messages.I18N_READY -> #[],
-            Messages.J2X_ISSUE -> #[]
-          ).labels)
-        labels
+        
+    private def getConvertFormLabels(Locale locale) {
+        (new I18nMap(
+            locale.TITLE,
+            locale.CONVERT_COMMAND,
+            locale.PASTE_JAVA_PLACE_HOLDER,
+            locale.GENERATED_CODE_PLACE_HOLDER,
+            locale.CREDITS,
+            locale.XTEND_CONTACT,
+            locale.I18N_READY,
+            locale.J2X_ISSUE) => [
+                putAll(locale.getLayoutLabels)
+            ]).map
     }
 
-    private def getLabels(Map<Messages, List<Object>> tags) {
-        <String, Object>newHashMap => [
-            for (pair : tags.entrySet) {
-                put(pair.key.name, new MessageParameterObj(pair.key, pair.value.toArray))
-            }
-        ]
+    private def getLayoutLabels(Locale locale) {
+        new I18nMap(
+            locale.LAYOUT_HEAD_TITLE,
+            locale.WELCOME_HOME_MENU,
+            locale.GO_TO_XTEND_MENU,
+            locale.FORK_ME_ON_GITHUB,
+            locale.LANGUAGE
+        ).map
     }
-
-//    private def get(String path, String viewname, Map<String, Object> model) {
-//        val m = insertContentTemplate(viewname, model)
-//        val rh = [Request req, Response res | new ModelAndView(m, "layout.ftl")]
-//        Spark.get(path, rh, freeMarkerEngine)
-//    }
+    
+    @Accessors
+    private static class I18nMap {
+        val map = <String, String>newHashMap
+        
+        new(Map.Entry<String, String> ...entries) {
+            entries.forEach[put]
+        }
+        
+        def put(Map.Entry<String, String> entry) {
+            map.put(entry.key, entry.value)
+        }
+        
+        def putAll(Map<String, String> entries) {
+            entries.entrySet.forEach[put]
+        }
+        
+    }
 
     private def get(String path, String viewname, Function2<Request, Response, Map<String, Object>> modelhandler) {
         val mh = [ Request req, Response res |
@@ -187,39 +187,36 @@ class Bootstrap {
         freeMarkerEngine = new FreeMarkerEngine(new Configuration(Configuration.VERSION_2_3_23) => [
             tagSyntax = Configuration.SQUARE_BRACKET_TAG_SYNTAX
             setClassForTemplateLoading(FreeMarkerEngine, "")
-            objectWrapper = new I18nWrapper(localeProvider)
         ])
     }
     
-    private def Provider<Locale> getLocaleProvider() {
-        new Provider<Locale>() {
-            override get() {
-                return locale
-            }
-        }
-    }
-
     private def initConverter() {
         val injector = new XtendStandaloneSetup().createInjectorAndDoEMFRegistration
         j2xConverter = injector.getInstance(DefaultStringConverter).configure(new DefaultConvertConfig)
     }
 
     private def initI18nConfig() {
-        val languageParam = System.getenv(LANGUAGE_TAG) ?: System.getProperty(LANGUAGE_TAG) ?: DEFAULT_LOCALE.language
-        val countryParam = System.getenv(COUNTRY_TAG) ?: System.getProperty(COUNTRY_TAG) ?: DEFAULT_LOCALE.country
-        locale = new Locale.Builder().setLanguage(languageParam).setLanguage(countryParam).build
-        if (! isLocaleAvailable(locale)) {
-            warn('''The required local («locale.language») is not available: «DEFAULT_LOCALE.language» will be used by default.''')
-            locale = DEFAULT_LOCALE
+        val languageParam = System.getenv(LANGUAGE_TAG) ?: System.getProperty(LANGUAGE_TAG)
+        val regionParam = System.getenv(COUNTRY_TAG) ?: System.getProperty(COUNTRY_TAG)
+        if (languageParam === null) {
+            if (regionParam !== null) {
+                warn("A region is required but no language is specified: user agent locale will be used.")
+            }
+            return
         }
+        
+        val locale = new Locale.Builder().setLanguage(languageParam).setRegion(regionParam).build
+        if (! isLocaleAvailable(locale)) {
+            warn('''The required locale («locale.language») is not available: user agent locale will be used.''')
+            return
+        }
+        forcedlocale = locale
     }
     
-    private def getUserAgentLocale(Request req) {
+    private static def getUserAgentLocale(Request req) {
         val language = Locale.LanguageRange.parse(req.headers("Accept-Language")).get(0).range
         Locale.forLanguageTag(language)
     }
-    
-    
 
     private static def initWebConfig() {
         port(Integer.parseInt(System.getenv(PORT_TAG) ?: System.getProperty(PORT_TAG) ?: DEFAULT_PORT))
