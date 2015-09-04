@@ -56,7 +56,7 @@
         <xtend.testOutputDir>${project.build.directory}/xtend-gen/test</xtend.testOutputDir>
 
         <xtend.maven.plugin.version>${xtendVersion}</xtend.maven.plugin.version>
-        <maven.enforcer.plugin.version>1.4</maven.enforcer.plugin.version>
+        <maven.enforcer.plugin.version>1.4.1</maven.enforcer.plugin.version>
         <build.helper.maven.plugin.version>1.9.1</build.helper.maven.plugin.version>
         <versions.maven.plugin.version>2.2</versions.maven.plugin.version>
         <maven.surefire.plugin.version>2.18.1</maven.surefire.plugin.version>
@@ -113,7 +113,25 @@
     </prerequisites>
 
     <dependencies>
-
+    
+        <dependency>
+            <groupId>org.pop-xtend</groupId>
+            <artifactId>contrib-annotations</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <classifier>all</classifier>
+        </dependency>
+        <!-- 
+        <dependency>
+            <groupId>org.pop-xtend</groupId>
+            <artifactId>contrib-i18n</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.pop-xtend</groupId>
+            <artifactId>contrib-noargsctor</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+ -->
         <dependency>
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>java2xtend</artifactId>
@@ -157,12 +175,13 @@
             <version>2.3.23</version>
         </dependency>
         
-        <!-- i18n -->
+        <!-- i18n 
         <dependency>
             <groupId>ch.qos.cal10n</groupId>
             <artifactId>cal10n-api</artifactId>
             <version>0.8.1</version>
         </dependency>
+        -->
         
         <!-- xtend -->
         <dependency>
