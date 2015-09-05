@@ -1,4 +1,4 @@
-A Java to Xtend converter online 
+A Java to Xtend converter online [![Build Status](https://travis-ci.org/atao60/j2x-on-openshift.svg?branch=master)](https://travis-ci.org/atao60/j2x-on-openshift)
 ==========
 
 Rational
@@ -37,7 +37,7 @@ If working under *Eclipse*:
 - [Xtend SDK](https://eclipse.org/xtend/download.html) 
 - [M2Eclipse](http://eclipse.org/m2e/).
 
-Furthermore it depends on the pop-xtend-contrib-annotations library available  
+Furthermore it depends on the [pop-xtend-contrib](https://github.com/atao60/pop-xtend-contrib) annotations library available 
 from [atao60 snapshots repository](https://github.com/atao60/snapshots) on *Github*.
 
 Build, deploy & run
@@ -82,4 +82,10 @@ Translation
 
 The project is i18n ready. Only French and English are currently available. If you wish to work with your own language, open a [feature request](https://github.com/atao60/j2x-on-openshift/issues) and provide the appropriate translation of this [file](https://github.com/atao60/j2x-on-openshift/blob/master/src/main/resources/i18n/converter_en.properties).  
 
-       
+Roadmap
+-------
+
+- Bidirectional convertion       
+- Display options: skip validation, skip formatting or even the formatting preferences.
+- Display errors outside of the xtend code area
+- Remove workaround about [Bug 476609 - projectSourceFolders doesn't catch the resources folders when used with Maven outside Eclipse](https://bugs.eclipse.org/bugs/show_bug.cgi?id=476609)
