@@ -37,11 +37,11 @@ If working under *Eclipse*:
 - [Xtend SDK](https://eclipse.org/xtend/download.html) 
 - [M2Eclipse](http://eclipse.org/m2e/).
 
-Furthermore it depends on the pop-xtend-contrib-annotations library available only 
-from [atao60 snapshots repository](https://github.com/atao60/snapshots).
+Furthermore it depends on the pop-xtend-contrib-annotations library available  
+from [atao60 snapshots repository](https://github.com/atao60/snapshots) on *Github*.
 
-Development
------
+Build, deploy & run
+------
 
 This project is store in two git repositories:
 
@@ -50,34 +50,36 @@ deploy any application on its platform. But it's a private repository.
 - this source code repository on [Github](https://github.com), as a public repository. 
 It is configured for continuous integration with [Travis-CI](https://travis-ci.org). 
 
-To install it, just clone it from *Github*:
+### Install
 
-    cd <git_repo>
+Just clone it from *Github*:
+
+    cd <local_git_repo>
     git clone https://github.com/atao60/j2x-on-openshift.git
 
-Build, deploy & run
-------
-
-### Standalone
+### Run at home
 
 To run it locally:
 
-    cd <git_repo>/j2x-on-openshift
+    cd <local_git_repo>/j2x-on-openshift
     mvn clean package ant:antrun -Pstandalone
     
 Then with your favorite browser, go to http://locahost:8083    
 
-### Remote repository
+### Run on Internet
 
-The local repository is synchronized with the git repositories. A single command is enough to update both of them:  
+As soon as a commit is pushed on the *Github* repository, Openshift will deploy it online:
 
-    cd <git_repo>/j2x-on-openshift
+    cd <local_git_repo>/j2x-on-openshift
     git commit -m "New commit"
     git push
     
 To deploy it on your own remote site, you must adapt the configuration files for TravisCI and Openshift 
 (or any other CI and PAAS platforms) with your parameters. 
 
-    
+Translation
+---------
+
+The project is i18n ready. Only French and English are currently available. If you wish to work with your own language, open a [feature request](https://github.com/atao60/j2x-on-openshift/issues) and provide the appropriate translation of this [file](https://github.com/atao60/j2x-on-openshift/blob/master/src/main/resources/i18n/converter_en.properties).  
 
        
