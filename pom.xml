@@ -119,6 +119,12 @@
             <artifactId>contrib-annotations</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <classifier>all</classifier>
+            <exclusions><!-- @WebApplication and @HttpHandler are not used here -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- 
         <dependency>
