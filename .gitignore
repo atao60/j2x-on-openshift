@@ -3,7 +3,6 @@ target
 !.settings/.jsdtscope
 .project
 .classpath
-/FORMEONLY.txt
-/*.launch
+/FORMEONLY*.*
 
 archives
